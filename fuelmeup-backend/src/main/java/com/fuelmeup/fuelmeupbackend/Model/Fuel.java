@@ -1,8 +1,6 @@
 package com.fuelmeup.fuelmeupbackend.Model;
 
-
-import com.fuelmeup.fuelmeupbackend.Enum.CreatorStatus;
-import jakarta.persistence.CascadeType;
+import com.fuelmeup.fuelmeupbackend.Enum.PaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,41 +9,48 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-public class Creator {
+public class Fuel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID creatorId;
+    private UUID fuelId;
 
-    @OneToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "creatorId", nullable = false)
+    private Creator creator;
+
+    @ManyToOne
+    @JoinColumn(name = "fuelerId", nullable = true)
     private User user;
 
-    @Column(nullable = true)
-    private String bio="This is your bio";
-
-    @Column(nullable = true)
-    private String profileImage="This is your profile image";
-
-    @Column(nullable = true)
-    private String coverImage="This is your cover image";
+    @Column(nullable = false)
+    private Integer amount;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CreatorStatus status=CreatorStatus.ACTIVE;
+    private PaymentStatus paymentStatus=PaymentStatus.PENDING;
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Fuel> fuel;
+    @Column(nullable = true)
+    private String message;
+
+    @Column(nullable = true)
+    private String razorpayOrderId;
+
+    @Column(nullable = true)
+    private String razorpayPaymentId;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
 }

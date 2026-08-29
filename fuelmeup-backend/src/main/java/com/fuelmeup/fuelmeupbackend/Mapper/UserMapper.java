@@ -3,7 +3,9 @@ package com.fuelmeup.fuelmeupbackend.Mapper;
 
 import com.fuelmeup.fuelmeupbackend.Dto.RequestDto.UserRegisterRequestDto;
 import com.fuelmeup.fuelmeupbackend.Dto.ResponseDto.UserLoginResponseDto;
+import com.fuelmeup.fuelmeupbackend.Dto.ResponseDto.UserProfileDetailsResponseDto;
 import com.fuelmeup.fuelmeupbackend.Dto.ResponseDto.UserRegisterResponseDto;
+import com.fuelmeup.fuelmeupbackend.Model.Creator;
 import com.fuelmeup.fuelmeupbackend.Model.User;
 
 public class UserMapper {
@@ -31,6 +33,16 @@ public class UserMapper {
     public static UserLoginResponseDto TokenToUserLoginResponseDto(String token){
         return UserLoginResponseDto.builder()
                 .token(token)
+                .build();
+    }
+
+    public static UserProfileDetailsResponseDto UserToUserProfileDetailsResponseDto(User user){
+        return UserProfileDetailsResponseDto.builder()
+                .id(user.getId().toString())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
                 .build();
     }
 

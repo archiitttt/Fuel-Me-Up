@@ -1,8 +1,10 @@
 package com.fuelmeup.fuelmeupbackend.Service;
 
 import com.fuelmeup.fuelmeupbackend.Dto.RequestDto.CreatorRegisterRequestDto;
+import com.fuelmeup.fuelmeupbackend.Dto.ResponseDto.CreatorDashboardDetailsResponseDto;
 import com.fuelmeup.fuelmeupbackend.Dto.ResponseDto.CreatorDetailsResponseDto;
 import com.fuelmeup.fuelmeupbackend.Dto.ResponseDto.CreatorRegisterResponseDto;
+import com.fuelmeup.fuelmeupbackend.Enum.Role;
 import com.fuelmeup.fuelmeupbackend.Exception.UserAlreadyExistsException;
 import com.fuelmeup.fuelmeupbackend.Mapper.CreatorMapper;
 import com.fuelmeup.fuelmeupbackend.Model.Creator;
@@ -29,6 +31,7 @@ public class CreatorService {
             throw new AccessDeniedException("Kindly log in or sign up before registering as a creator.");
         }
         User user = userService.findUserByUsername(userDetails.getUsername());
+        user.setRole(Role.ROLE_CREATOR);
         if(creatorRepo.existsByUserId(user.getId())){
             throw new UserAlreadyExistsException("User is already a registered creator.");
         }
@@ -46,5 +49,14 @@ public class CreatorService {
 
         return CreatorMapper.CreatorToCreatorDetailsResponseDto(creator);
     }
+
+    boolean creatorExistsByName(String creatorName){
+        return creatorRepo.existsCreatorByUserUsername(creatorName);
+    }
+
+    public Creator findCreatorByCreatorName(String creatorName){
+        return creatorRepo.findByUserUsername(creatorName).orElseThrow(()-> new UsernameNotFoundException("Creator not found."));
+    }
+
 
 }

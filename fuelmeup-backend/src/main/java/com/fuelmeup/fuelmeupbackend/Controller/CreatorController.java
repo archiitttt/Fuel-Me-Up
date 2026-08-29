@@ -38,9 +38,16 @@ public class CreatorController {
 
     @GetMapping("/{creatorName}")
     @Operation(description = "Fetch creator details from the creator name.")
-    public ResponseEntity<?> creatorDetails(@PathVariable String creatorName){
+    public ResponseEntity<CreatorDetailsResponseDto> creatorDetails(@PathVariable String creatorName){
         CreatorDetailsResponseDto response = creatorService.creatorDetails(creatorName);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PreAuthorize("hasRole('CREATOR')")
+    @GetMapping("/me")
+    @Operation(description = "Fetch creator details for creator's dashboard.")
+    public ResponseEntity<?> creatorDashboardDetails(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok().body("");
     }
 
 }
